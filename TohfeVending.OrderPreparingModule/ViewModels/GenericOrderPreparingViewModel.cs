@@ -16,6 +16,7 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
         IList<OrderItemProcessStepViewModel> _processes;
         Beverage _selectedBeverage;
         bool _isInProgress = false;
+        bool _isCanceled = false;
 
         public Beverage SelectedBeverage
         {
@@ -52,17 +53,22 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
                 BackCommand.RaiseCanExecuteChanged();
             }
         }
+        public bool IsCanceled
+        {
+            get { return _isCanceled; }
+            set
+            {
+                SetProperty(ref _isCanceled, value);
+                CancelCommand.RaiseCanExecuteChanged();
+            }
+        }
 
         public GenericOrderPreparingViewModel(IRegionManager regionManager)
         {
             _regionManager = regionManager;
 
-            CancelCommand = new DelegateCommand(CancelTheProcess, () => IsInProgress);
+            CancelCommand = new DelegateCommand(CancelTheProcess, () => IsInProgress && !IsCanceled);
             BackCommand = new DelegateCommand(Back, () => !IsInProgress);
-
-            TohfeVending.Model.Services.GetMachine().OnFunctionStart += GenericOrderPreparingViewModel_OnFunctionStart;
-            TohfeVending.Model.Services.GetMachine().OnFunctionDone += GenericOrderPreparingViewModel_OnFunctionDone; ;
-            TohfeVending.Model.Services.GetMachine().OnMakingDone += GenericOrderPreparingViewModel_OnMakingDone;
         }
 
         void GenericOrderPreparingViewModel_OnFunctionStart(object sender, AbstractMachineFunction e)
@@ -76,25 +82,31 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
 
             if (IsInProgress)
                 Processes.FirstOrDefault(x => x.SelectedFunction == e)?.Done();
-
-            IsInProgress = TohfeVending.Model.Services.GetMachine().VendingMachineStatus != VendingMachineStatusType.StandBy;
         }
 
         void GenericOrderPreparingViewModel_OnMakingDone(object sender, Beverage e)
         {
-            IsInProgress = TohfeVending.Model.Services.GetMachine().VendingMachineStatus != VendingMachineStatusType.StandBy;
+            Services.GetMachine().OnFunctionStart -= GenericOrderPreparingViewModel_OnFunctionStart;
+            Services.GetMachine().OnFunctionDone -= GenericOrderPreparingViewModel_OnFunctionDone; ;
+            Services.GetMachine().OnMakingDone -= GenericOrderPreparingViewModel_OnMakingDone;
+
+            IsInProgress = false;
         }
 
         async Task StartTheProcess()
         {
             IsInProgress = true;
+            IsCanceled = false;
+
+            Services.GetMachine().OnFunctionStart += GenericOrderPreparingViewModel_OnFunctionStart;
+            Services.GetMachine().OnFunctionDone += GenericOrderPreparingViewModel_OnFunctionDone; ;
+            Services.GetMachine().OnMakingDone += GenericOrderPreparingViewModel_OnMakingDone;
 
             await SelectedBeverage.Make();
         }
         async void CancelTheProcess()
         {
-            IsInProgress = false;
-
+            IsCanceled = true;
             await TohfeVending.Model.Services.GetMachine().Stop();
         }
         async void Back()
