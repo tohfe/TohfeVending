@@ -13,6 +13,7 @@ namespace TohfeVending.Model
 
         public event EventHandler<AbstractMachineFunction> OnFunctionStart;
         public event EventHandler<AbstractMachineFunction> OnFunctionDone;
+        public event EventHandler<Beverage> OnMakingDone;
 
         private VendingMachineStatusType internalVendingMachineStatus = VendingMachineStatusType.StandBy;
         public VendingMachineStatusType VendingMachineStatus { get => internalVendingMachineStatus; }
@@ -59,7 +60,7 @@ namespace TohfeVending.Model
             Beverages.Add(Beverage.Lemon_Tea);
         }
 
-        public async Task Make(Beverage beverage)
+        internal async Task Make(Beverage beverage)
         {
             while (!IsStandBy) ;
 
@@ -77,14 +78,12 @@ namespace TohfeVending.Model
 
                 if (IsStandBy) break;
 
-                if (process == beverage.ProcessesInOrder[beverage.ProcessesInOrder.Count - 1]) break;
-
-                if (IsStandBy) break;
-
                 OnFunctionDone?.Invoke(this, process);
             }
 
             SetMachineStatus(VendingMachineStatusType.StandBy);
+
+            OnMakingDone?.Invoke(this, beverage);
         }
 
         bool IsStandBy => VendingMachineStatus == VendingMachineStatusType.StandBy;

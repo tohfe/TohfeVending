@@ -62,6 +62,7 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
 
             TohfeVending.Model.Services.GetMachine().OnFunctionStart += GenericOrderPreparingViewModel_OnFunctionStart;
             TohfeVending.Model.Services.GetMachine().OnFunctionDone += GenericOrderPreparingViewModel_OnFunctionDone; ;
+            TohfeVending.Model.Services.GetMachine().OnMakingDone += GenericOrderPreparingViewModel_OnMakingDone;
         }
 
         void GenericOrderPreparingViewModel_OnFunctionStart(object sender, AbstractMachineFunction e)
@@ -76,6 +77,12 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
             if (IsInProgress)
                 Processes.FirstOrDefault(x => x.SelectedFunction == e)?.Done();
 
+            IsInProgress = TohfeVending.Model.Services.GetMachine().VendingMachineStatus != VendingMachineStatusType.StandBy;
+        }
+
+        void GenericOrderPreparingViewModel_OnMakingDone(object sender, Beverage e)
+        {
+            IsInProgress = TohfeVending.Model.Services.GetMachine().VendingMachineStatus != VendingMachineStatusType.StandBy;
         }
 
         async Task StartTheProcess()
