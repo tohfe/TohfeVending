@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs
+/TohfeVending.HeaderModule/obj
+/TohfeVending.Model/obj/Debug
+/TohfeVending.OrderPreparingModule/obj
+/TohfeVending.OrdersModule/obj
+/TohfeVending.Shell/bin/Debug
+/TohfeVending.Shell/obj
