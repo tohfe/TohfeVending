@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TohfeVending.Model
+﻿namespace TohfeVending.Model
 {
     public abstract class IngredientContainer
     {
@@ -29,7 +27,7 @@ namespace TohfeVending.Model
 
         string IAddable.Name { get => "ingredients"; }
 
-        public void Add(IngredientContainer container)
+        void IAddable.Add(IngredientContainer container)
         {
             //TODO:
         }

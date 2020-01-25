@@ -5,10 +5,6 @@ using System.Threading.Tasks;
 
 namespace TohfeVending.Model
 {
-    public interface IVendingMachine
-    {
-    }
-
     public interface IAddable
     {
         void Add(IngredientContainer container);

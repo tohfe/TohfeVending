@@ -1,11 +1,10 @@
 ﻿using TohfeVending.OrderPreparingModule.Views;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 
 namespace TohfeVending.OrderPreparingModule
 {
-    public class OrderPreparingModuleModule : IModule
+    public class OrderPreparingModule : IModule
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {

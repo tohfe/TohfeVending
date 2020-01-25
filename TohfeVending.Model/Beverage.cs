@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static TohfeVending.Model.AbstractMachineFunction;
 
 namespace TohfeVending.Model
 {
     public class Beverage
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
         public List<Ingredient> Ingredients { get; set; }
         public List<AbstractMachineFunction> ProcessesInOrder { get; set; }
         public Beverage(string name)

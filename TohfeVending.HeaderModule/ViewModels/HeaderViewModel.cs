@@ -9,7 +9,7 @@ using TohfeVending.Model;
 
 namespace TohfeVending.HeaderModule.ViewModels
 {
-    public class ViewAViewModel : BindableBase
+    public class HeaderViewModel : BindableBase
     {
         private string _message;
         public string Message
@@ -30,7 +30,7 @@ namespace TohfeVending.HeaderModule.ViewModels
         }
         public string Avatar { get => $"/TohfeVending.Shell;component/assets/avatar-{UserInfo.Avatar}.png"; }
 
-        public ViewAViewModel()
+        public HeaderViewModel()
         {
             Message = "E-Corp Vending Machine";
 

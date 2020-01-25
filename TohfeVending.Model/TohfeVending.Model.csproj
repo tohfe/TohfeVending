@@ -41,11 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Machine Function.cs" />
+    <Compile Include="Machine Function\AbstractIngredientBasedMachineFunction.cs" />
+    <Compile Include="Machine Function\AbstractMachineFunction.cs" />
+    <Compile Include="Machine Function\Add.cs" />
+    <Compile Include="Machine Function\Boil.cs" />
+    <Compile Include="Machine Function\ChangeContainer.cs" />
+    <Compile Include="Machine Function\Crush.cs" />
+    <Compile Include="Machine Function\Blend.cs" />
     <Compile Include="Beverage.cs" />
     <Compile Include="IngredientContainer.cs" />
     <Compile Include="Ingredient.cs" />
-    <Compile Include="IVendingMachine .cs" />
+    <Compile Include="IAddable.cs" />
+    <Compile Include="Machine Function\Steep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="UserData.cs" />

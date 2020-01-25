@@ -5,12 +5,12 @@ using Prism.Regions;
 
 namespace TohfeVending.HeaderModule
 {
-    public class HeaderModuleModule : IModule
+    public class HeaderModule : IModule
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
             var regionManager = containerProvider.Resolve<IRegionManager>();
-            regionManager.RegisterViewWithRegion("HeaderRegion", typeof(ViewA));
+            regionManager.RegisterViewWithRegion("HeaderRegion", typeof(Header));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

@@ -5,7 +5,7 @@ using Prism.Regions;
 
 namespace TohfeVending.OrdersModule
 {
-    public class OrdersModuleModule : IModule
+    public class OrdersModule : IModule
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {

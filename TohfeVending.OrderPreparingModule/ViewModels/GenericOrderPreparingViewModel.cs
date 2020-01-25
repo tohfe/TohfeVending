@@ -16,7 +16,6 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
         IList<OrderItemProcessStepViewModel> _processes;
         Beverage _selectedBeverage;
         bool _isInProgress = false;
-        bool _isCompleted = false;
 
         public Beverage SelectedBeverage
         {
@@ -53,25 +52,17 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
                 BackCommand.RaiseCanExecuteChanged();
             }
         }
-        public bool IsCompleted
-        {
-            get { return _isCompleted; }
-            set
-            {
-                SetProperty(ref _isCompleted, value);
-            }
-        }
+
         public GenericOrderPreparingViewModel(IRegionManager regionManager)
         {
             _regionManager = regionManager;
 
-            CancelCommand = new DelegateCommand(CancelTheProcess, CanCancel);
-            BackCommand = new DelegateCommand(Back, CanBack);
+            CancelCommand = new DelegateCommand(CancelTheProcess, () => IsInProgress);
+            BackCommand = new DelegateCommand(Back, () => !IsInProgress);
 
             TohfeVending.Model.Services.GetMachine().OnFunctionStart += GenericOrderPreparingViewModel_OnFunctionStart;
             TohfeVending.Model.Services.GetMachine().OnFunctionDone += GenericOrderPreparingViewModel_OnFunctionDone; ;
         }
-
 
         void GenericOrderPreparingViewModel_OnFunctionStart(object sender, AbstractMachineFunction e)
         {
@@ -99,7 +90,6 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
 
             await TohfeVending.Model.Services.GetMachine().Stop();
         }
-
         async void Back()
         {
             await TohfeVending.Model.Services.GetMachine().Restart();
@@ -107,21 +97,13 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
             NavigateToOrdersList();
         }
 
-        bool CanBack()
-        {
-            return !IsInProgress;
-        }
-
-        bool CanCancel()
-        {
-            return IsInProgress;
-        }
-
-
         void NavigateToOrdersList()
         {
             _regionManager.RequestNavigate("ContentRegion", "OrdersList");
         }
+
+
+        #region INavigationAware
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
@@ -141,5 +123,7 @@ namespace TohfeVending.OrderPreparingModule.ViewModels
         {
 
         }
+
+        #endregion
     }
 }
